@@ -241,7 +241,10 @@ export default defineEventHandler(
 
     const prepareScript = readFileSync("./server/scripts/prepare.js", "utf-8");
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
 
     const logs: string[] = [];
