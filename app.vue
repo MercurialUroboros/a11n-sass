@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import VanishingInput from "./components/ui/vanishing-input/VanishingInput.vue";
 import { LoaderCircle } from "lucide-vue-next";
-const inputValue = ref("http://localhost:5174/");
+
+type Result = {
+  check: string;
+  status: string;
+  details?: string[];
+};
+
+const inputValue = ref("https://www.didap.it/");
 
 const showResults = ref(false);
 const pending = ref(false);
-
-const { data, execute } = await useLazyFetch("/api/audit", {
-  immediate: false, // don't fetch right away
-  query: {
-    url: inputValue.value, // your audit target
-  },
-});
+const results = ref<Result[]>([]);
 
 const handleSubmit = async () => {
   pending.value = true;
-  await execute();
+  const data = await $fetch(`/api/audit?url=${inputValue.value}`);
+  results.value = data.results;
   showResults.value = true;
   pending.value = false;
 };
@@ -46,7 +48,7 @@ const handleSubmit = async () => {
           </thead>
           <tbody>
             <tr
-              v-for="(result, index) in data?.results"
+              v-for="(result, index) in results"
               :key="index"
               class="border-b hover:bg-gray-50">
               <td class="px-4 py-3 font-medium text-gray-900">

@@ -241,7 +241,7 @@ export default defineEventHandler(
 
     const prepareScript = readFileSync("./server/scripts/prepare.js", "utf-8");
 
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
 
     const logs: string[] = [];
@@ -273,7 +273,7 @@ export default defineEventHandler(
     await page.goto(url, { waitUntil: "networkidle0" });
 
     // Wait for hydration, etc.
-    await delay(2000);
+    await delay(3000);
 
     const results: Result[] = [];
 
