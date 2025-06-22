@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Menu, X, ShoppingCart } from "lucide-vue-next";
+import { Menu, X } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
+import {
+  GoogleSignInButton,
+  type CredentialResponse,
+} from "vue3-google-signin";
 
 const isOpen = ref(false);
 
@@ -10,10 +14,18 @@ const leftNavigation = [
   { name: "Collections", href: "#" },
 ];
 
-const rightNavigation = [
-  { name: "About", href: "#" },
-  { name: "Contact", href: "#" },
-];
+const rightNavigation = [{ name: "About", href: "#" }];
+
+// handle success event
+const handleLoginSuccess = (response: CredentialResponse) => {
+  const { credential } = response;
+  console.log("Access Token", credential);
+};
+
+// handle an error event
+const handleLoginError = () => {
+  console.error("Login failed");
+};
 </script>
 
 <template>
@@ -56,9 +68,10 @@ const rightNavigation = [
               {{ item.name }}
             </a>
           </div>
-          <Button variant="ghost" size="icon">
-            <ShoppingCart class="h-5 w-5" />
-          </Button>
+
+          <GoogleSignInButton
+            @success="handleLoginSuccess"
+            @error="handleLoginError" />
         </div>
       </nav>
 
