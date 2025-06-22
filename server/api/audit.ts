@@ -241,7 +241,7 @@ export default defineEventHandler(
 
     const prepareScript = readFileSync("./server/scripts/prepare.js", "utf-8");
 
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     const logs: string[] = [];
